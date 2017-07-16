@@ -1,0 +1,4 @@
+.pioenvs
+lib
+src/wifi.cfg
+src/*.h
