@@ -6,9 +6,7 @@
 #include "index.h"
 char* index_html = reinterpret_cast<char*>(&src_index_html[0]);
 
-#define LED_ON LOW
-#define LED_OFF HIGH
- 
+// NB: the integrated LED is inverted (on when pin is LOW).
 int ledPin = 2; // GPIO2
 ESP8266WebServer server(80);
  
@@ -42,17 +40,17 @@ void setup() {
         Serial.println("POST: /");
         server.sendHeader("Location", "/", true);
         server.send(302, "text/plain", "");
-        digitalWrite(ledPin, LED_ON);
+        digitalWrite(ledPin, HIGH);
         delay(250);
-        digitalWrite(ledPin, LED_OFF);
+        digitalWrite(ledPin, LOW);
     });
 
     server.begin();
     Serial.println("Server is running.");
-    digitalWrite(ledPin, LED_ON); delay(250);
-    digitalWrite(ledPin, LED_OFF); delay(250);
-    digitalWrite(ledPin, LED_ON); delay(250);
-    digitalWrite(ledPin, LED_OFF);
+    digitalWrite(ledPin, HIGH); delay(250);
+    digitalWrite(ledPin, LOW); delay(250);
+    digitalWrite(ledPin, HIGH); delay(250);
+    digitalWrite(ledPin, LOW);
 }
  
 void loop() {
