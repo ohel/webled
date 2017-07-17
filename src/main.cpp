@@ -6,13 +6,15 @@
 #include "index.h"
 char* index_html = reinterpret_cast<char*>(&src_index_html[0]);
 
-// NB: the integrated LED is inverted (on when pin is LOW).
-int ledPin = 2; // GPIO2
+int ledPin = 2; // GPIO2 - NB: the integrated LED is inverted (on when pin is LOW).
+int altPin = 4; // GPIO4 - alternative signal pin so as not to signal on setup.
+
 ESP8266WebServer server(80);
  
 void setup() {
     Serial.begin(115200);
     pinMode(ledPin, OUTPUT);
+    pinMode(altPin, OUTPUT);
 
     Serial.print("Connecting to: ");
     Serial.println(ssid);
@@ -41,8 +43,10 @@ void setup() {
         server.sendHeader("Location", "/", true);
         server.send(302, "text/plain", "");
         digitalWrite(ledPin, HIGH);
+        digitalWrite(altPin, HIGH);
         delay(250);
         digitalWrite(ledPin, LOW);
+        digitalWrite(altPin, LOW);
     });
 
     server.begin();
