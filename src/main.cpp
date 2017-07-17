@@ -2,8 +2,7 @@
 #include "ESP8266WiFi.h"
 #include "ESP8266WebServer.h"
  
-#include "ssid.h"
-#include "password.h"
+#include "wificonfig.h"
 #include "index.h"
 char* index_html = reinterpret_cast<char*>(&src_index_html[0]);
 
@@ -20,6 +19,7 @@ void setup() {
     Serial.print("Connecting to: ");
     Serial.println(ssid);
      
+    WiFi.config(ip, gateway, subnet);
     WiFi.begin(ssid, password);
      
     while (WiFi.status() != WL_CONNECTED) {
@@ -30,17 +30,18 @@ void setup() {
     Serial.print("WiFi connected using IP address: ");
     Serial.println(WiFi.localIP());
      
-    server.on("/", [](){
-        Serial.println("Request: /");
+    server.on("/", HTTP_GET, [](){
+        Serial.println("GET: /");
         server.send(200, "text/html", index_html);
     });
-    server.on("/favicon.ico", [](){
-        Serial.println("Request: /favicon.ico");
+    server.on("/favicon.ico", HTTP_GET, [](){
+        Serial.println("GET: /favicon.ico");
         server.send(404);
     });
-    server.on("/pulse", [](){
-        Serial.println("Request: /pulse");
-        server.send(200, "text/html", index_html);
+    server.on("/", HTTP_POST, [](){
+        Serial.println("POST: /");
+        server.sendHeader("Location", "/", true);
+        server.send(302, "text/plain", "");
         digitalWrite(ledPin, LED_ON);
         delay(250);
         digitalWrite(ledPin, LED_OFF);
