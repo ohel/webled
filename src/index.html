@@ -1,12 +1,33 @@
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-    </head>
-    <body>
-        <h1>WebLED</h1>
-        <p>Paina nappia lähettääksesi signaalin.</p>
-        <form method="post">
-            <input type="submit">
-        </form>
-    </body>
+<head>
+<meta charset="utf-8">
+<style>
+body {
+    background-color: black;
+    color: lightgray;
+    font-family: sans-serif;
+    font-size: 30px;
+    text-align: center;
+}
+form {
+    margin: 0;
+}
+input.button-signal {
+    background-color: green;
+    border: 0;
+    border-radius: 20px;
+    font-size: 10rem;
+    max-width: 100%;
+    padding: 10rem;
+    vertical-align: middle;
+}
+</style>
+</head>
+<body>
+    <h1>WebLED</h1>
+    <p>Click the green button to send a signal.</p>
+    <form method="post">
+        <input type="submit" value="OK" class="button-signal">
+    </form>
+</body>
 </html>
