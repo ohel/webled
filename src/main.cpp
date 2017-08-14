@@ -1,8 +1,10 @@
 #include "Arduino.h"
 #include "ESP8266WiFi.h"
 #include "ESP8266WebServer.h"
+#include "string.h"
  
 #include "wificonfig.h"
+#include "apconfig.h"
 #include "index.h"
 char* index_html = reinterpret_cast<char*>(&src_index_html[0]);
 
@@ -16,10 +18,41 @@ void setup() {
     pinMode(ledPin, OUTPUT);
     pinMode(altPin, OUTPUT);
 
+    IPAddress subnet(255, 255, 255, 0);
+
+    Serial.println("");
+    if (strlen(soft_ap_ssid) > 0) {
+        Serial.println("Setting up AP:");
+        Serial.print("    SSID: ");
+        Serial.println(soft_ap_ssid);
+        WiFi.mode(WIFI_AP_STA);
+        Serial.print("    Password: ");
+        if (strlen(soft_ap_password) < 8) {
+            Serial.println("N/A");
+            WiFi.softAP(soft_ap_ssid);
+        } else {
+            Serial.println(soft_ap_password);
+            WiFi.softAP(soft_ap_ssid, soft_ap_password);
+        }
+        Serial.print("    IP/Gateway: ");
+        Serial.println(soft_ap_ip);
+        WiFi.softAPConfig(soft_ap_ip, soft_ap_ip, subnet);
+    } else {
+        Serial.println("Not setting up AP.");
+        WiFi.mode(WIFI_STA);
+    }
+
+    Serial.println("");
+    if (ip == INADDR_NONE) {
+        Serial.println("Using dynamic IP address.");
+    } else {
+        Serial.print("Using static IP address: ");
+        Serial.println(ip.toString());
+        WiFi.config(ip, gateway, subnet);
+    }
     Serial.print("Connecting to: ");
     Serial.println(ssid);
-     
-    WiFi.config(ip, gateway, subnet);
+
     WiFi.begin(ssid, password);
      
     while (WiFi.status() != WL_CONNECTED) {
@@ -29,6 +62,11 @@ void setup() {
     Serial.println("");
     Serial.print("WiFi connected using IP address: ");
     Serial.println(WiFi.localIP());
+
+    if (strlen(soft_ap_ssid) > 0) {
+        Serial.print("WiFi AP IP address: ");
+        Serial.println(WiFi.softAPIP());
+    }
      
     server.on("/", HTTP_GET, [](){
         Serial.println("GET: /");
