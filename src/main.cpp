@@ -50,18 +50,24 @@ void setup() {
         Serial.println(ip.toString());
         WiFi.config(ip, gateway, subnet);
     }
-    Serial.print("Connecting to: ");
-    Serial.println(ssid);
 
     WiFi.begin(ssid, password);
-     
-    while (WiFi.status() != WL_CONNECTED) {
-        delay(500);
+    int timeout = 0;
+    Serial.print("Connecting to: ");
+    Serial.println(ssid);
+    while (WiFi.status() != WL_CONNECTED && timeout < 10) {
+        delay(1000);
         Serial.print(".");
+        timeout++;
     }
     Serial.println("");
-    Serial.print("WiFi connected using IP address: ");
-    Serial.println(WiFi.localIP());
+    if (WiFi.status() != WL_CONNECTED) {
+        Serial.println("Unable to connect. Operating as access point only.");
+        WiFi.mode(WIFI_AP);
+    } else {
+        Serial.print("WiFi connected using IP address: ");
+        Serial.println(WiFi.localIP());
+    }
 
     if (strlen(soft_ap_ssid) > 0) {
         Serial.print("WiFi AP IP address: ");
