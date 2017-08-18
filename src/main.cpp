@@ -8,8 +8,15 @@
 #include "index.h"
 char* index_html = reinterpret_cast<char*>(&src_index_html[0]);
 
-int ledPin = 2; // GPIO2 - NB: the integrated LED is inverted (on when pin is LOW).
-int altPin = 4; // GPIO4 - alternative signal pin so as not to signal on setup.
+// On D1 boards the integrated LED is inverted (on when pin is LOW).
+int ledPin = LED_BUILTIN;
+// Alternative signal pin so as not to signal on setup.
+// On D1 mini LED_BUILTIN == D4.
+#ifdef ESP8266_WEMOS_D1MINI
+static const int altPin = D2;
+#else
+static const int altPin = D4;
+#endif
 
 ESP8266WebServer server(80);
  

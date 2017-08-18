@@ -2,3 +2,5 @@
 lib
 src/*.cfg
 src/*.h
+.piolibdeps
+.travis.yml
