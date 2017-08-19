@@ -91,8 +91,7 @@ void setup() {
     });
     server.on("/", HTTP_POST, [](){
         Serial.println("POST: /");
-        server.sendHeader("Location", "/", true);
-        server.send(302, "text/plain", "");
+        server.send(200, "text/plain", "");
         digitalWrite(ledPin, HIGH);
         digitalWrite(altPin, HIGH);
         delay(250);

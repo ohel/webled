@@ -9,25 +9,60 @@ body {
     font-size: 30px;
     text-align: center;
 }
-form {
-    margin: 0;
+h1 {
+    margin-top: 30px;
 }
-input.button-signal {
+#signalButton {
     background-color: green;
     border: 0;
     border-radius: 20px;
+    color: black;
+    display: inline-block;
     font-size: 10rem;
-    max-width: 100%;
     padding: 10rem;
-    vertical-align: middle;
 }
 </style>
 </head>
 <body>
+
     <h1>WebLED</h1>
     <p>Click the green button to send a signal.</p>
-    <form method="post">
-        <input type="submit" value="OK" class="button-signal">
-    </form>
+    <div id="signalButton">OK</div>
+
+<script>
+var signalButton = document.getElementById("signalButton");
+signalButton.addEventListener("click", sendSignal);
+
+function sendSignal() {
+
+    function resetButton() {
+        signalButton.style.backgroundColor="green";
+        signalButton.addEventListener("click", sendSignal);
+    }
+
+    signalButton.removeEventListener("click", sendSignal);
+    signalButton.style.backgroundColor="lightgreen";
+
+    var xhr = new XMLHttpRequest();
+
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState == XMLHttpRequest.DONE) {
+            signalButton.style.backgroundColor="white";
+            setTimeout(resetButton, 500);
+        }
+    }
+
+    xhr.timeout = 2500;
+    xhr.ontimeout = function() {
+        signalButton.style.backgroundColor="red";
+        setTimeout(resetButton, 500);
+    }
+
+    xhr.open("POST", "/", true);
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhr.send();
+}
+</script>
+
 </body>
 </html>
