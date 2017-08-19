@@ -6,7 +6,9 @@
 #include "wificonfig.h"
 #include "apconfig.h"
 #include "index.h"
+#include "favicon.h"
 char* index_html = reinterpret_cast<char*>(&src_index_html[0]);
+char* favicon = reinterpret_cast<char*>(&src_favicon_ico[0]);
 
 // On D1 boards the integrated LED is inverted (on when pin is LOW).
 int ledPin = LED_BUILTIN;
@@ -87,7 +89,7 @@ void setup() {
     });
     server.on("/favicon.ico", HTTP_GET, [](){
         Serial.println("GET: /favicon.ico");
-        server.send(404);
+        server.send_P(200, "image/x-icon", favicon, src_favicon_ico_len);
     });
     server.on("/", HTTP_POST, [](){
         Serial.println("POST: /");

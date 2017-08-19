@@ -34,6 +34,7 @@ echo ${ap_pass:-""} | sed "s/\(.*\)/const char* soft_ap_password = \"\0\";/" >> 
 echo ${ap_ip:-"0.0.0.0"} | sed "s/\./, /g" | sed "s/\(.*\)/IPAddress soft_ap_ip(\0);/" >> $ap_cfg_out
 
 xxd -i src/index.html | sed 's/\([0-9a-f]\)$/\0, 0x00/' > src/index.h
+xxd -i src/favicon.ico > src/favicon.h
 
 port=$(pio device list | grep -B 2 "VID:PID=$piodev" | head -n 1)
 pio run -t upload --upload-port $port
