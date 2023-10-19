@@ -1,6 +1,4 @@
-.pioenvs
-lib
-src/*.cfg
+.pio
+src/*.json
 src/*.h
-.piolibdeps
-.travis.yml
+compile_commands.json

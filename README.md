@@ -1,6 +1,6 @@
 # WebLED
 
-An IoT learning project to blink a LED using the ESP8266 chip. LED/pin status is controlled via a web page served by the device. The web page can be written as a regular html file. It is converted to includable file with xxd using a build script.
+An IoT learning project to blink a LED using the ESP8266 chip. LED/pin status is controlled via a web page served by the device. The web page can be written as a regular html file.
 
 Wifi and access point may be configured using configuration files.
 
