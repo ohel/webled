@@ -5,19 +5,19 @@ import re
 import traceback
 
 def getFileBytes(filename: str, append_zero_byte: bool = False):
-    bytes = []
+    file_bytes = []
     with open(filename, 'rb') as f:
         for byte in iter(lambda: f.read(1), b''):
-            bytes.append('0x' + binascii.hexlify(byte).decode())
-    if append_zero_byte: bytes.append('0x00')
-    return bytes
+            file_bytes.append('0x' + binascii.hexlify(byte).decode())
+    if append_zero_byte: file_bytes.append('0x00')
+    return file_bytes
 
 def createHeaderFile(file_in: str, file_out, var_name: str, append_zero_byte: bool = False):
-    bytes = getFileBytes(file_in, append_zero_byte)
+    file_bytes = getFileBytes(file_in, append_zero_byte)
     str_out = 'unsigned char ' + var_name + '_bytes[] = {'
     # The 12 bytes per line is just for nice output.
     bytecount = 12
-    for byte in bytes:
+    for byte in file_bytes:
         if bytecount == 12:
             str_out += '\n  '
             bytecount = 0
